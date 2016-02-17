@@ -1,33 +1,14 @@
 var auth = require('./auth');
-var projectsController = require('../controllers/projectsController');
-var testsController = require('../controllers/testsController');
-var commentsController = require('../controllers/commentsController');
-var imagesController = require('../controllers/imagesController');
-var mousetrackingController = require('../controllers/mousetrackingController');
-var invitationController = require('../controllers/invitationController');
-var usersController = require('../controllers/usersController.js');
-var Promise = require("bluebird");
-var fs = require('fs');
-var nodemailer = require('nodemailer');
-var mailAuth = require('./mailAuth');
-var port = 2999;
+var userRoutes = require('./routers/userRoutes');
+var testviewRoutes = require('./routers/testviewRoutes');
+var invitationRoutes = require('./routers/invitationRoutes');
+var projectRouter = require('./routers/projectRouter');
+var testRouter = require('./routers/testRouter');
+var commentRouter = require('./routers/commentRouter');
+var imageRouter = require('./routers/imageRouter');
+var mousetrackingRouter = require('./routers/mousetrackingRouter');
 
-// inputs:
-// in data field:
-//    user:
-//      email: the useraname
-//      password: the password
-// output:
-// in data field:
-//    message: if failure, reason for failure
 module.exports = function (app, express) {
-  app.post('/api/users/signin', auth.authenticate, function (req, res) {
-    res.json(req.userToken);
-  });
-
-  app.post('/api/users/signup', auth.createUser, auth.authenticate, function (req, res) {
-    res.json(req.userToken);
-  });
 
   app.delete('/api/users/signin', auth.signout);
 
@@ -707,4 +688,5 @@ module.exports = function (app, express) {
           res.status(500).end('Mousetracking DELETE Error!');
         });
     });
+
 };
