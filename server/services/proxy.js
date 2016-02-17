@@ -26,13 +26,14 @@ module.exports = function (express, session, callback) {
     var proxy = proxyMiddleware(context, options);
 
     proxyServer.use(proxy);
-    fs.readFile(__dirname + '/../../client/public/testview/testview.html', 'utf8', function (err, data) {
-      if (err) {
-        throw (new Error('ERROR! Read file error!', err));
-      } else {
-        res.send(data);
-      }
-    });
+    // fs.readFile(__dirname + '/../../client/public/testview/testview.html', 'utf8', function (err, data) {
+    //   if (err) {
+    //     throw (new Error('ERROR! Read file error!', err));
+    //   } else {
+    //     res.send(data);
+    //   }
+    // });
+    res.sendFile(__dirname + '/../../client/public/testview/testview.html');
   });
 
   proxyServer.get('/api/realUrl', auth.decode, function (req, res) {
@@ -44,6 +45,7 @@ module.exports = function (express, session, callback) {
     var resolution = [req.body.resolution[0] + 'x' + req.body.resolution[1]];
     var directory = __dirname + '/../data/screenshots/' + session.testId + '/';
     var dir = path.resolve(__dirname, '../data/screenshots/', session.testId) + '/';
+    console.log('image save location:', dir, directory)
 
     var slug = function (input) {
       return input
