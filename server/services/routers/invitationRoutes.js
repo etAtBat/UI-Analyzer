@@ -1,5 +1,5 @@
 var usersController = require('../../controllers/usersController');
-// var mailService = require('../mail');
+var mailService = require('../mail');
 var auth = require('../auth');
 
 module.exports = function (app, express) {
