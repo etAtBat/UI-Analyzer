@@ -1,53 +1,53 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { NavItem, Navbar, Nav } from 'react-bootstrap';
+import { signsOut, getsProject } from '../redux/actions';
+import { browserHistory } from 'react-router';
 import SidebarNavigation from '../components/dashboardPageComponents/sidebarNavigation/SidebarNavigation';
 import Content from '../components/dashboardPageComponents/contentComponents/Content';
-import { connect } from 'react-redux';
-import { authChecker, showImagePage } from '../redux/actions';
-import { Navbar } from 'react-bootstrap';
-import { NavItem } from 'react-bootstrap';
-import { Nav } from 'react-bootstrap';
-import { signsOut, setFocus } from '../redux/actions';
 
 export default class DashboardPage extends Component {
-  handleLogout () {
-    this.props.dispatch(signsOut());
-    if (this.props.projects.list) {
-      this.props.dispatch(setFocus('project', this.props.projects.list[this.props.projects.list.length - 1]));
-    }
-    setTimeout(() => {
-      localStorage.removeItem('Scrutinize.saved.state');
-    }, 250)
-  }
+  constructor (props) {
+    super(props);
+    this.state = {
+      projectModalVisibility : false
+    };
+  };
 
-  componentDidMount () {
-    if (this.props.projects.list.length > 0) {
-      this.props.dispatch(setFocus('project', this.props.projects.list[this.props.projects.list.length - 1]));
-      this.props.dispatch(setFocus('test', this.props.projects.list[this.props.projects.length - 1].id));
-    }
-  }
+  handleLogout () {
+    this.props.dispatch(signsOut(browserHistory));
+  };
+
+  toggleProjectVisibility () {
+    this.setState(prev => ({ projectModalVisibility : !prev.projectModalVisibility }));
+  };
+
+  componentWillMount () {
+    this.props.dispatch(getsProject());
+  };
 
   componentDidMount () {
     setTimeout(() => {
       window.removeHeatmap();
-    }, 1200)
-  }
+    }, 1200);
+  };
 
   render () {
     return (
       <div className = "DashboardPage">
         <Navbar className="navbar navbar-inverse">
-          <a className="navbar-brand" href="#">Scrutinize</a>
+          <a onClick = { () => browserHistory.push('/dashboard') } className="navbar-brand" href="#">Scrutinize</a>
           <Nav className="navbar-nav navbar-right">
-            <NavItem onClick={ () => { this.handleLogout() } } href = "#"> Log Out </NavItem>
+            <NavItem onClick={ () => this.handleLogout() } href = "#"> Log Out </NavItem>
           </Nav>
         </Navbar>
-        <SidebarNavigation />
-        <Content />
+        <SidebarNavigation visibility = { this.state.projectModalVisibility } toggleProjectVisibility = { this.toggleProjectVisibility.bind(this) }/>
+        { React.cloneElement(this.props.children, { toggleProjectVisibility: this.toggleProjectVisibility.bind(this) }) }
       </div>
-    )
-  }
-}
+    );
+  };
+};
 
-const select = (state) => state
+const select = (state) => state;
 
-export default connect(select)(DashboardPage)
+export default connect(select)(DashboardPage);

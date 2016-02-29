@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 
-class WelcomeToComments extends Component {
+export default class ReportSplash extends Component {
   render () {
     return (
       <div id="testStartPrompt">
-        <p id="testPrompt"></p>
         <p>Use the right arrow to get to the next image.</p>
-        <p>Press Ctrl + D to end the feedback session.</p>
+        <p>Press Ctrl + H to view mouse movement heatmap.</p>
+        <p>Press Ctrl + R to replay mouse movement.</p>
+        <p>Press Ctrl + D to exit the report.</p>
         <div id="testviewLoading">
           <div className="bigSqr">
             <div className="square first"></div>
@@ -17,8 +18,6 @@ class WelcomeToComments extends Component {
           <div className="testPrompt">loading...</div>
         </div>
       </div>
-    )
+    );
   }
-}
-
-export default WelcomeToComments;
+};
